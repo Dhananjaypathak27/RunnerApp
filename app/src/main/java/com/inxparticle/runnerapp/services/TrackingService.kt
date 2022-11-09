@@ -19,10 +19,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
-import com.inxparticle.runnerapp.MainActivity
 import com.inxparticle.runnerapp.R
 import com.inxparticle.runnerapp.db.other.Constants.ACTION_PAUSE_SERVICE
-import com.inxparticle.runnerapp.db.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.inxparticle.runnerapp.db.other.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.inxparticle.runnerapp.db.other.Constants.ACTION_STOP_SERVICE
 import com.inxparticle.runnerapp.db.other.Constants.FASTEST_LOCATION_INTERVAL
@@ -155,12 +153,23 @@ class TrackingService : LifecycleService() {
             val pauseIntent = Intent(this, TrackingService::class.java).apply {
                 action = ACTION_PAUSE_SERVICE
             }
-            PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
+                PendingIntent.getService(this, 1, pauseIntent,
+                    PendingIntent.FLAG_IMMUTABLE)
+            }else{
+                PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
         } else {
             val resumeIntent = Intent(this, TrackingService::class.java).apply {
                 action = ACTION_START_OR_RESUME_SERVICE
             }
-            PendingIntent.getService(this, 2, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
+                PendingIntent.getService(this, 2, resumeIntent, PendingIntent.FLAG_IMMUTABLE)
+            }
+            else{
+                PendingIntent.getService(this, 2, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
         }
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

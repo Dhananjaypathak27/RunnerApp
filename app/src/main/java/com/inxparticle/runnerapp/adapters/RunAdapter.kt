@@ -33,13 +33,6 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
     fun submitList(list: List<Run>) = differ.submitList(list)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunViewHolder {
-//        return RunViewHolder(
-//            LayoutInflater.from(parent.context).inflate(
-//                R.layout.item_run,
-//                parent,
-//                false
-//            )
-//        )
         val binding = ItemRunBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return RunViewHolder(binding)

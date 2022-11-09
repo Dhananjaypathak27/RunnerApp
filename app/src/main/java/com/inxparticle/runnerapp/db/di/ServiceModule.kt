@@ -3,6 +3,7 @@ package com.inxparticle.runnerapp.db.di
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.inxparticle.runnerapp.MainActivity
@@ -29,14 +30,19 @@ object ServiceModule {
     @Provides
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context
-    ) = PendingIntent.getActivity(
-        app,
-        0,
-        Intent(app, MainActivity::class.java).also {
-            it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
-        },
-        PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    ): PendingIntent {
+        var pendingIntent= PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
+            pendingIntent = PendingIntent.FLAG_IMMUTABLE
+        }
+            return PendingIntent.getActivity(
+            app,
+            0,
+            Intent(app, MainActivity::class.java).also {
+                it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
+            },
+            pendingIntent)
+    }
 
     @ServiceScoped
     @Provides

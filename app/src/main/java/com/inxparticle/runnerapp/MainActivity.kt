@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         binding.bottomNavigationView.setupWithNavController(findNavController(R.id.navHostFragment))
-
         navigateToTrackingFragmentIfNeeded(intent)
 
         findNavController(R.id.navHostFragment).addOnDestinationChangedListener { _, destination, _ ->
